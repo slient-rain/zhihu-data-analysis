@@ -5,7 +5,7 @@ import traceback
 from Log import FinalLogger
 from user import User
 #entity 类
-class UserData:
+class UserData2:
     _name=None
     _url=None
     _followeeNum=None
@@ -13,25 +13,16 @@ class UserData:
     _anserNum=None
     _agreeNum=None
     _thanksNum=None
-    def __init__(self, user_url):
-        try:
+    def __init__(self, user_url=None,name=None,followeeNum=None,followerNum=None,anserNum=None,agreeNum=None,thanksNum=None):
 
-                user=User(user_url)
-                self._url=user_url
-                self._name=user.get_user_id()
-                self._followeeNum=user.get_followees_num()
-                self._followerNum=user.get_followers_num()
-                self._anserNum=user.get_answers_num()
-                self._agreeNum=user.get_agree_num()
-                self._thanksNum=user.get_thanks_num()
+                self._url = user_url
+                self._name = name
+                self._followeeNum = followeeNum
+                self._followerNum = followerNum
+                self._anserNum = anserNum
+                self._agreeNum = agreeNum
+                self._thanksNum=thanksNum
 
-
-        except:
-            s = traceback.format_exc()
-            s += ('error url is %s' % self._url)
-            print s
-            logger=FinalLogger.getLogger()
-            logger.error(s)
 
 
     def setName(self,name):
@@ -90,8 +81,4 @@ class UserData:
     def getFollowers(self):
         user = User(self._url)
         return user.get_followers()
-
-    #标准写法是这样的，Python语言特定的序列化模块是pickle，但如果要把序列化搞得更通用、更符合Web标准，就可以使用json模块
-    # def dict2UserData(d):
-    #     return UserData(d['url'], d['name'], d['thanksnum'])
 

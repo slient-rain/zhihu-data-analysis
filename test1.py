@@ -6,7 +6,9 @@ from Log import FinalLogger
 from UserData import  UserData
 import datetime,time,random
 from multiprocessing import  Pool
-import logging
+import logging,json
+
+from UserData2 import UserData2
 from auth import Logging
 import os
 from DAO import UserDataDAO ,Level3UserDataDAO
@@ -112,6 +114,24 @@ def get_user_data(level2_user):
         logger.error(s)
     return level3_user_set
 
+
+def dict2UserData( d):
+    user=UserData('https://www.zhihu.com/people/kuang-kuang-15')
+    user.setAgreeNum( d['_agreeNum'])
+    user.setAnswerNum(  d['_anserNum'])
+    # self._followeeNum = d['_followeeNum']
+    # self._followerNum = d['_followerNum']
+    # self._name = d['_name']
+    # self._thanksNum = d['_thanksNum']
+    # self._url = d['_url']
+    return user
+
+
+def dict2UserData( d):
+    return UserData2( d['_url'], d['_name'], d['_followeeNum'], d['_followerNum'], d['_anserNum'], d['_agreeNum'],
+                    d['_thanksNum'])
+
+
 if __name__=='__main__':
     pass
     level3_user_set=set()
@@ -119,24 +139,36 @@ if __name__=='__main__':
     # level3_user_set.add("http;//1")
     # level3_user_set.add("http;//2")
     # level3_user_set.add("http;//3")
-    dao = UserDataDAO()
-    level2_user_data_set = dao.queryAll()
-    for level2_user in level2_user_data_set:
-        try:
-            level2_user_data = UserData(level2_user[2])
-            level3_user_gen = level2_user_data.getFollowees()
-            for level3_user in level3_user_gen:
-                level3_user_set.add(level3_user.user_url)
-        except:
-            s = traceback.format_exc()
-            print s
-            logger = FinalLogger.getLogger()
-            logger.error(s)
-            continue
+    # dao = UserDataDAO()
+    # level2_user_data_set = dao.queryAll()
+    # for level2_user in level2_user_data_set:
+    #     try:
+    #         level2_user_data = UserData(level2_user[2])
+    #         level3_user_gen = level2_user_data.getFollowees()
+    #         for level3_user in level3_user_gen:
+    #             level3_user_set.add(level3_user.user_url)
+    #     except:
+    #         s = traceback.format_exc()
+    #         print s
+    #         logger = FinalLogger.getLogger()
+    #         logger.error(s)
+    #
+    #         continue
+    s=UserData('https://www.zhihu.com/people/kuang-kuang-15')
+    # class Student(object):
+    #     def __init__(self, name, age, score):
+    #         self.name = name
+    #         self.age = age
+    #         self.score = score
+    #
+    #
+    # s = Student('Bob', 20, 88)
+    res= json.dumps(s,  default=lambda obj: obj.__dict__)
+    print res
+    r=json.load(res,object_hook=dict2UserData)
+    print r
 
-
-
-
-    print level3_user_set
-    urlDao=UserUrlDAO()
-    urlDao.addMany(level3_user_set)
+    #
+    # print level3_user_set
+    # urlDao=UserUrlDAO()
+    # urlDao.addMany(level3_user_set)

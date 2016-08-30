@@ -242,7 +242,7 @@ class Level3ParallelFetch:
             s = traceback.format_exc()
             s += ('error url is %s' % self.user_url)
             print s
-            logger=FinalLogger()
+            logger=FinalLogger.getLogger()
             logger.error(s)
             time.sleep(10)
 

@@ -11,6 +11,7 @@ import requests, termcolor
 from PIL import Image
 import cStringIO
 
+import traceback
 s = requests.Session()
 s.cookies = cookielib.LWPCookieJar('cookies')
 try:
@@ -138,11 +139,10 @@ def search_xsrf():
 
 def download_captcha():
     captcha_url='https://www.zhihu.com/captcha.gif?r=1471250634734&type=login'
-    
     res = s.get(captcha_url,headers=headers_base,verify=False)
     image = Image.open(cStringIO.StringIO(res.content))
     image.show()
-	
+    image.save('test.png')
     sys.stdout.write(termcolor.colored(u"请输入验证码: ", "cyan") )
     captcha_code = raw_input( )
     return captcha_code	
